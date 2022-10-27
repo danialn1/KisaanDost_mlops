@@ -1,0 +1,67 @@
+---
+ Intent-Slot:
+   Greeting: []
+   Bye: []
+   UNK: []
+   Machinery Related:
+     - Machine Problems
+     - Solution
+   Yielding Season Query:
+     - Crop Type
+     - User Location
+     - Solution
+   Seed Recommendation Query:
+     - Crop Type
+     - Solution
+   Crop Knowledge:
+     - Crop Type
+     - User Location
+     - Solution 
+   Crop Quality Query:
+     - Crop Type
+     - User Location
+     - Solution 
+   Crop Disease:
+     - Crop Type
+     - User Location
+     - Crop Symptoms
+     - Solution 
+   Spray Recommendation Query:
+     - Crop Type
+     - User Location
+     - Crop Symptoms
+     - Solution 
+   Fertilizer Recommendation:
+     - Crop Type
+     - User Location
+     - Solution 
+   Seed Availability:
+     - Crop Type
+     - User Location
+     - Solution
+   Farming Tips:
+     - Crop Type
+     - Solution 
+ Slot-Prompt:
+   Solution:
+     - phir ______ hai ap ka hal
+     - ap ka hal _____ hai
+     - ap ke masle ha hal _____ hai
+     - meje pata hai ap ke masle ko kaise hal karna hai. _____
+   Crop Type:
+     - ap kon se fasal auga rahe hain
+     - ap kis kisam ki fasal auga rahe hain
+   Crop Symptoms:
+     - ap ke fasal ko kia howa hai
+     - ap ke fasal ko kia masla ho raha hai
+     - ap ko ap ke fasaloun kay sath kia masail hain
+   User Location: 
+     - ap apne fasal kahan augate hain
+     - ap apne fasal kidhar auga rahe hain
+     - ap kidhar kaam kar rahe hain
+     - ap kidhar kaam karte hain
+     - ap kahan kaam kar rahe hain
+     - ap kahan kaam karte hain
+   Machine Problems:
+     - ap ke machinery ka kia issue hai
+     - ap ko apne machinery ke sath kia masail darpesh hain
