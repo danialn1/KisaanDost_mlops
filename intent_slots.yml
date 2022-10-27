@@ -6,11 +6,11 @@
    Machinery Related:
      - Machine Problems
      - Solution
-   Yielding Season Query:
+   Yielding Season:
      - Crop Type
      - User Location
      - Solution
-   Seed Recommendation Query:
+   Seed Recommendation:
      - Crop Type
      - Solution
    Crop Knowledge:
@@ -26,7 +26,7 @@
      - User Location
      - Crop Symptoms
      - Solution 
-   Spray Recommendation Query:
+   Spray Recommendation:
      - Crop Type
      - User Location
      - Crop Symptoms
@@ -46,7 +46,7 @@
    Solution:
      - phir ______ hai ap ka hal
      - ap ka hal _____ hai
-     - ap ke masle ha hal _____ hai
+     - ap ke masle ka hal _____ hai
      - meje pata hai ap ke masle ko kaise hal karna hai. _____
    Crop Type:
      - ap kon se fasal auga rahe hain
