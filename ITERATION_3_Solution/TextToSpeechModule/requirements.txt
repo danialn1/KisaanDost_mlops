@@ -1,0 +1,5 @@
+-e ./TTS/
+torchaudio
+pydub
+ffmpeg-normalize==1.21.0
+numpy==1.20
