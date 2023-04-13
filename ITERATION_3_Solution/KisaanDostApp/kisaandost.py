@@ -140,7 +140,7 @@ class KisaanDost:
     def __init__(self, text_file_path: str, model_file_path: str):
         self.text_file_path = text_file_path
         self.retriever = AgriRetriever(self.text_file_path)
-        MODEL_NAME = 'bigscience/bloomz-560m'
+        self.MODEL_NAME = 'bigscience/bloomz-560m'
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.tokenizer = BloomTokenizerFast.from_pretrained(self.MODEL_NAME)
         self.model = torch.load(model_file_path)
