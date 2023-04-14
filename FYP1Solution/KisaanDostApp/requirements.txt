@@ -18,4 +18,3 @@ regex
 rank_bm25
 transformers
 sentencepiece
-torch
