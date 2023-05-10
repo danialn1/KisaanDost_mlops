@@ -1,4 +1,7 @@
 import os
+import re
+import requests
+from bs4 import BeautifulSoup
 import torch
 import torchaudio
 
@@ -69,9 +72,36 @@ class TextToSpeech:
                                '۔': '.',
                                '؟': '?'
                           }
+        self.transliteration_url = 'https://www.ijunoon.com/transliteration/urdu-to-roman/'
+        self.headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Firefox/80.0'}
+        self.DEFAULT_RESPONSE = 'mein abhi kaam nahi kar rahe hon barah karam kuch der baad koshish karen'
+
+    def preprocess_urdu(self,
+                        text: str):
+        text = text.replace('یٰ', 'ی')
+        text = re.sub("[\u200f\u200e]", ' ', text)
+        return text
+     
+    def online_transliterate(self,
+                             text: str):
+        text = self.preprocess_urdu(text)
+        try:
+            reply = requests.post(self.transliteration_url,
+                                  headers=self.headers,
+                                  data={'text': text},
+                                  timeout=300)
+            soup = BeautifulSoup(reply.text, 'html.parser')
+            result_list = soup.find('div', id='ctl00_inpageResult').find_all('p')
+            if result_list:
+                return result_list[0].text
+            else:
+                return self.DEFAULT_RESPONSE
+        except:
+            return self.DEFAULT_RESPONSE
         
     def urdu2roman(self,
                    text: str) -> str:
+        text = self.online_transliterate(text)
         return ''.join([self.urdu_to_roman_urdu_dict[char] if char in self.urdu_to_roman_urdu_dict else char for char in text])
 
     def predict(self,

@@ -1,3 +1,5 @@
+requests
+beautifulsoup4
 omegaconf
 numpy
 torch>=1.10.0
