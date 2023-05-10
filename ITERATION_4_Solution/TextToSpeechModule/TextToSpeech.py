@@ -7,11 +7,13 @@ import torchaudio
 
 class TextToSpeech:
     def __init__(self):
-        model, example_text = torch.hub.load(repo_or_dir='snakers4/silero-models',
-                                             model='silero_tts',
-                                             language='indic',
-                                             speaker='v3_indic')
-        self.model = model
+        dir = os.path.dirname(__file__)
+        self.local_file = 'tts_model.pt'
+        self.local_file = os.path.join(dir, self.local_file)
+        if not os.path.isfile(self.local_file):
+            torch.hub.download_url_to_file('https://models.silero.ai/models/tts/indic/v3_indic.pt',
+                                           self.local_file)  
+        self.model = torch.package.PackageImporter(self.local_file).load_pickle("tts_models", "model")
         self.urdu_to_roman_urdu_dict = {
                                'ا': 'a',
                                'آ': 'a',

@@ -1,4 +1,4 @@
-from TextToSpeech import TextToSpeech
+from TextToSpeechModule import TextToSpeech
 
 tts = TextToSpeech()
 
