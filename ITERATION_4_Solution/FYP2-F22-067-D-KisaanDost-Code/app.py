@@ -1,39 +1,25 @@
-from flask import Flask, render_template, request, url_for, redirect, session
+from flask import Flask, render_template, request, url_for, redirect, session, jsonify
 import pymongo
 import bcrypt
 import json
-from flask import jsonify
-import yaml
-from collections import defaultdict
-from random import randrange
 import requests
-import io
-from kisaandost import *
-from io import BytesIO
-import os
-import requests
-from werkzeug.utils import secure_filename
-
-import time
-import torch
+from kisaandost import KisaanDost
 from TextToSpeechModule import TextToSpeech
+
+REMOTE_SERVER_URL = "https://1234.ngrok-free.app"
+myKisaanDost = KisaanDost(REMOTE_SERVER_URL)
 
 tts = TextToSpeech()
 
-TEXT_CORPUS_PATH = 'ur_kb.txt'
-MODEL_FILE_PATH = 'finetuned_bloomz_v4.pt'
-myKisaanDost = KisaanDost(TEXT_CORPUS_PATH, MODEL_FILE_PATH)
-
 app = Flask(__name__)
-
 app.secret_key = "testing"
+
 client = pymongo.MongoClient("mongodb+srv://admin:admin@cluster0.zlyczjv.mongodb.net/?retryWrites=true&w=majority")
 db = client.get_database('total_records')
 records = db.register
 
-
-
-
+API_URL = "https://api-inference.huggingface.co/models/ihanif/whisper-medium-urdu"
+headers = {"Authorization": "Bearer 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"}
 
 def get_weather(city):
     api_key = 'ea324abd7d9babdbacb0f763e7c59cdb'
@@ -48,19 +34,16 @@ def get_weather(city):
     else:
         return 'Failed to retrieve weather data'
 
-
 @app.route("/")
 def home():
     return render_template("home.html")
-
 
 @app.route("/get", methods=['POST'])
 def get_bot_response():
     userText = request.data
     userText = json.loads(userText.decode('utf-8'))['msg']
-    response = myKisaanDost.run_chatbot_next_response(userText)
+    response = "Remote Server Sleeping"#myKisaanDost.run_chatbot_next_response(userText)
     return jsonify({"response": response})
-
 
 @app.route("/index", methods=['post', 'get'])
 def index():
@@ -95,8 +78,6 @@ def index():
    
             return render_template('logged_in.html', email=new_email)
     return render_template('index.html')
-
-
     
 @app.route("/login", methods=["POST", "GET"])
 def login():
@@ -157,9 +138,6 @@ def logout():
         session['is_logged_in'] = True
         return render_template('index.html')
 
-
-
-
 @app.route('/chatbot')
 def chatbot():
     if "email" in session:
@@ -188,28 +166,6 @@ def logged_inU():
     else:
         return redirect(url_for("login"))
 
-
-
-
-import requests
-
-API_URL = "https://api-inference.huggingface.co/models/ihanif/whisper-medium-urdu"
-headers = {"Authorization": "Bearer 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"}
-
-
-
-# @app.route('/transcribe', methods=['POST'])
-# def transcribe():
-#     file = request.files['audio']
-#     audio_data = file.read()
-#     print(audio_data)
-#     response = requests.post(API_URL, headers=headers, data=audio_data) 
-#     audio_text = response.json()
-#     a=audio_text.get('text')
-#     print(a)
-#     return a 
-
-
 @app.route('/transcribe', methods=['POST'])
 def transcribe():
     audio_file = request.files['audio']
@@ -228,10 +184,5 @@ def transcribe():
     else:
         return jsonify({'error': 'Transcription failed'}), response.status_code
 
-
-
-
-
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
