@@ -59,11 +59,14 @@ def get_bot_response():
     id = session['email']
     userText = request.data
     userText = json.loads(userText.decode('utf-8'))['msg']
-    userDialogue[id].append({'Agent':'Farmer',
-                             'Message':userText})
-    response = myKisaanDost.run_chatbot_next_response(userText, dialog=userDialogue[id])
-    userDialogue[id].append({'Agent':'KisaanBot',
-                             'Message':response})
+    if len(userDialogue[id]) >= 2 and userText == userDialogue[id][-2]['Message']:
+        response = userDialogue[id][-1]['Message']
+    else:
+        userDialogue[id].append({'Agent':'Farmer',
+                                 'Message':userText})
+        response = myKisaanDost.run_chatbot_next_response(userText, dialog=userDialogue[id])
+        userDialogue[id].append({'Agent':'KisaanBot',
+                                 'Message':response})
     #audio = tts.predict(response)  # Generate audio from the chatbot response
     tts.predict_and_save(text=response,
                          save_path="",
