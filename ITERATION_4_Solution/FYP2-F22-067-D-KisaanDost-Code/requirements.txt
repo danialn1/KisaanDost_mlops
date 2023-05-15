@@ -10,3 +10,6 @@ omegaconf
 torch>=1.10.0
 PySoundFile
 torchaudio
+transformers
+librosa
+pydub

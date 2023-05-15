@@ -7,6 +7,7 @@ class KisaanDost:
         self.remote_server_url = remote_server_url
         self.headers = {'Content-Type': 'application/json'}
         self.dialog = []
+        self.DEFAULT_RESPONSE = u'میں ابھی کام نہیں کر رہا ہوں بارہ کرم کچھ دیر بعد کوشیش کریں'
 
     def get_user_input(self, user_input=None):
         if not user_input:
@@ -24,22 +25,19 @@ class KisaanDost:
         text = response.json()['kisaanDostReply']
         return text
         
-    def generate_response(self):
+    def generate_response(self, dialog=[]):
         try: 
-            if self.dialog[-1]['Agent'] != 'Farmer':
+            if len(dialog) == 0 or dialog[-1]['Agent'] != 'Farmer':
                 raise Exception("No user input received.") 
-            text = self.get_remote_server_response(self.dialog[-5:])
-            if u'اسلام علیکم' not in self.dialog[-1]['Message'] and u'وا الاکوم سلام' in text:
+            text = self.get_remote_server_response(dialog[-5:])
+            if u'اسلام علیکم' not in dialog[-1]['Message'] and u'وا الاکوم سلام' in text:
                 text = text.replace(u'وا الاکوم سلام۔', '')
                 text = text.replace(u'وا الاکوم سلام', '')
                 text = text.strip()
-            self.dialog.append({'Agent':'KisaanBot',
-                                'Message':text})
+            return text
         except Exception as e:
-            print("ERROR:",e)
-            self.dialog.append({'Agent':'KisaanBot',
-                                'Message':'میں ابھی کام نہیں کر رہا ہوں۔ بعد میں دوبارہ کوشش کریں۔'}) 
-    
+            return self.DEFAULT_RESPONSE
+
     def return_last_response_message(self):
         for message_dict in self.dialog[::-1]:
             if message_dict['Agent']=='KisaanBot':
@@ -53,7 +51,6 @@ class KisaanDost:
             self.generate_response()
             print(f"{self.dialog[-1]['Agent']}: {self.dialog[-1]['Message']}")
 
-    def run_chatbot_next_response(self,text):
-        self.get_user_input(text)
-        self.generate_response()
-        return self.dialog[-1]['Message']
+    def run_chatbot_next_response(self,text, dialog = []):
+        response = self.generate_response(dialog)
+        return response

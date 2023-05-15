@@ -324,6 +324,39 @@ h1.title {
 
 }
 
+@media (max-width: 320px) {
+  .abt_title {
+    padding-left: 0%;
+  }
+
+  .nav.nav-bg {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  nav ul.show {
+    left: 0;
+    top: 4.8rem;
+  }
+
+  .i.materials-icon-outlined {
+    justify-content: flex-end;
+
+  }
+  #textInput{
+    width: 101% ;
+    margin: 0px auto ;
+    height: 7px;
+    padding: 32px;
+  }
+  #send {
+    margin-top: 12%;
+    margin-left: 216px;
+  }
+}
+
+
+
 @media (max-width: 375px) {
   .abt_title {
     padding-left: 0%;
@@ -343,7 +376,16 @@ h1.title {
     justify-content: flex-end;
 
   }
-
+  #textInput{
+    width: 101% !important;
+    margin: 0px auto !important;
+    height: 7px;
+    padding: 32px;
+  }
+  #send {
+    margin-top: 12%;
+    margin-left: 216px;
+  }
 }
 
 /* Responsive design nav and banner */
@@ -460,7 +502,7 @@ h1.title {
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media  (max-width: 600px) {
 
   /* Add styles for mobile view here */
   /* Make the width of all elements 100% */
@@ -469,14 +511,23 @@ h1.title {
     width: 100%;
   }
 
+  /* #textInput{
+
+  } */
+
   nav {
     width: 100%;
+    justify-content: center;
   }
 
   /* You can also add styles for specific elements, like the navbar */
   nav .log_btns {
     display: none;
     /* hide the login buttons on mobile view */
+  }
+
+  nav ul.show{
+    top: 4.8rem;
   }
 }
 
@@ -609,7 +660,7 @@ body.chatbot {
   background: #1F3F25;
   margin: 10px;
   max-width: 300px;
-  min-width: 50px;
+  min-width: 200px;
   color: #F8F1BA;
   font-size: 16px;
   padding: 10px 20px;
@@ -731,16 +782,6 @@ input:checked+.slider:before {
   top: 9px;
 }
 
-@media (max-width: 1040px) {
-  #send {
-    width: 73px;
-    position: absolute;
-    height: 42px;
-    margin-left: 684px;
-    top: -25px;
-  }
-}
-
 .urdu {
   font-family: "urdufont", sans-serif;
 }
@@ -760,15 +801,45 @@ input:checked+.slider:before {
     margin-left: 273px;
     margin-top: -37px;
   }
+
+  #send {
+    width: 73px;
+    position: absolute;
+    height: 42px;
+    margin-left: 684px;
+    top: -25px;
+  }
 }
 
 .microphone:hover {
   transform: scale(1.2);
 }
+@media (max-width: 1080px) {
+  .microphone {
+    width: 2%;
+    margin-left: 273px;
+    margin-top: -37px;
+  }
+  
+  #textInput {
+    width: 48%;
+    padding-left: 38px;
+    padding-right: 75px;
+    margin: 110px auto;
+    border-radius: 10px;
+  }
 
+  #send {
+    width: 73px;
+    position: absolute;
+    height: 42px;
+    margin-left: 684px;
+    top: -25px;
+  }
+}
 @media (max-width: 1440px) {
   #textInput {
-    width: 35%;
+    width: 34%;
   }
 
   .microphone {
@@ -776,7 +847,8 @@ input:checked+.slider:before {
   }
 
   #send {
-    margin-left: 858px;
+    margin-left: 62%;
+    margin-top: 3%;
   }
 }
 
@@ -786,8 +858,13 @@ input:checked+.slider:before {
   }
 
   #send {
-    margin-left: 670px;
+    margin-left: 617px;
+    top: -136px;
   }
+
+  /* #recordButton{
+
+  } */
 }
 
 .first-chat .arrow {
@@ -855,7 +932,7 @@ input:checked+.slider:before {
 
 
 /* //MOBILE RESPONSIVE */
-@media (max-width: 450px) {
+@media (max-width: 480px) {
   #chat_window1 {
     margin: 0px auto;
     bottom: -123px;
@@ -864,9 +941,9 @@ input:checked+.slider:before {
   }
 
   #textInput {
-    width: 101% !important;
-    margin: 5px auto !important;
-    height: 250px;
+    width: 74% !important;
+    margin: 80px auto !important;
+    height: 70px;
     padding: 31px;
   }
 
@@ -877,9 +954,10 @@ input:checked+.slider:before {
     margin-left: 0px;
   }
 
+
   #send {
-    margin-top: -44%;
-    margin-left: 248px;
+    margin-top: 12%;
+    margin-left: 56%;
   }
 
   body.chatbot {
@@ -888,6 +966,7 @@ input:checked+.slider:before {
 
   .nav-bg {
     width: 100% !important;
+    justify-content: center;
   }
 
   .abt_title {
@@ -961,7 +1040,8 @@ input:checked+.slider:before {
     width: 48%;
     padding-left: 38px;
     padding-right: 75px;
-    margin: 4px auto;
+    margin: 110px auto;
+    border-radius: 10px;
   }
 }
 

@@ -69,68 +69,170 @@
       <input type="text" id="textInput" class="chat-input" onkeypress="return runScript(event)"
         placeholder="Type your message here..." />
       <button id="recordButton">record</button>
+
+
+
       <button id="send" onclick="userResponse()">Send</button>
     </div>
   </div>
 </div>
+
+
+
+
 <script>
+const messageBox = document.getElementById('messageBox');
+
+function appendMessage(message,audioURL) {
+  const p = document.createElement('p');
+  p.textContent = message;
+  messageBox.appendChild(p);
+
   
-const recordButton = document.getElementById('recordButton');
-
-// Initialize the MediaRecorder instance
-let mediaRecorder = null;
-let chunks = [];
-let audioBlob = null;
-
-recordButton.addEventListener('click', () => {
-  if (mediaRecorder && mediaRecorder.state === 'recording') {
-    mediaRecorder.stop();
-    return;
-  }
-
-  navigator.mediaDevices.getUserMedia({ audio: true })
-    .then((stream) => {
-      mediaRecorder = new MediaRecorder(stream);
-
-      mediaRecorder.addEventListener('dataavailable', (event) => {
-        chunks.push(event.data);
-      });
-
-      mediaRecorder.addEventListener('stop', () => {
-        audioBlob = new Blob(chunks, { type: 'audio/wav' });
-        chunks = [];
-
-        // Send the audio blob to the server for transcription
-        sendAudioToServer(audioBlob);
-      });
-
-      mediaRecorder.start();
-    })
-    .catch((error) => {
-      console.error('Error accessing microphone:', error);
-    });
-});
-
-
-function sendAudioToServer(audioBlob) {
-  const formData = new FormData();
-  formData.append('audio', audioBlob, 'audio.wav');
-
-  fetch('/transcribe', {
-    method: 'POST',
-    body: formData
-
-  })
-  .then(response => response.text())
-  .then(transcription => {
-    console.log(transcription);
-  })
-  .catch(error => {
-    console.error('Error transcribing audio:', error);
-  });
 }
 
-</script>
+
+function appendVoiceMessage(transcription, audioPlayer) {
+  const messageContainer = document.createElement('div');
+  messageContainer.classList.add('message-container');
+
+  // Append the audio player and transcription to the message container
+  messageContainer.appendChild(audioPlayer);
+
+  const p = document.createElement('p');
+  p.textContent = transcription;
+  messageContainer.appendChild(p);
+
+  // Append the message container to the message box
+  const messageBox = document.getElementById('messageBox');
+  messageBox.appendChild(messageContainer);
+}
+const recordButton = document.getElementById('recordButton');
+
+  // Initialize the MediaRecorder instance
+  let mediaRecorder = null;
+  let chunks = [];
+  let audioBlob = null;
+  
+  recordButton.addEventListener('click', () => {
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+      mediaRecorder.stop();
+      return;
+    }
+  
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((stream) => {
+        mediaRecorder = new MediaRecorder(stream);
+        let audioBitsPerSecond = mediaRecorder.audioBitsPerSecond;
+        let channels = 2;
+        let bitsPerSample = 16;
+        let samplingRate = audioBitsPerSecond / (channels * (bitsPerSample / 8));
+
+        mediaRecorder.addEventListener('dataavailable', (event) => {
+          chunks.push(event.data);
+        });
+  
+        mediaRecorder.addEventListener('stop', () => {
+          audioBlob = new Blob(chunks, { type: 'audio/wav' });
+          chunks = [];
+  
+          // Send the audio blob to the server for transcription
+          sendAudioToServer(audioBlob, samplingRate);
+        });
+  
+        mediaRecorder.start();
+      })
+      .catch((error) => {
+        console.error('Error accessing microphone:', error);
+      });
+  });
+  
+  
+  function sendAudioToServer(audioBlob, samplingRate) {
+    const formData = new FormData();
+    formData.append('audio', audioBlob, 'audio.wav');
+    formData.append('sr', samplingRate);
+  
+    fetch('/transcribe', {
+      method: 'POST',
+      body: formData
+  
+    })
+    .then(response => response.text())
+    .then(transcription => {
+      appendMessage(transcription);
+      getChatbotResponse(transcription);
+    })
+    .catch(error => {
+      console.error('Error transcribing audio:', error);
+    });
+  }
+
+  function getChatbotResponse(transcription) {
+    const data = {
+      msg: transcription
+    };
+
+    fetch('/get', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+     })
+    .then(response => response.json())
+    .then(data => {
+      const chatbotResponse = data.response;
+      const audioData = atob(data.audio).split('').map(char => char.charCodeAt(0));
+      // Create an audio element for the voice message
+      const audioBlob = new Blob([new Uint8Array(audioData)], { type: 'audio/wav' });
+      const audioURL = URL.createObjectURL(audioBlob);
+      const audioPlayer = document.createElement('audio');
+      audioPlayer.controls = true;
+      audioPlayer.src = audioURL;
+      // Process and display the chatbot response as needed
+      appendVoiceMessage(chatbotResponse, audioPlayer);
+    })
+    .catch(error => {
+      console.error('Error getting chatbot response:', error);
+    });
+  }
+
+     
+    // const chatForm = document.getElementById('chat-form');
+    // const chatWindow = document.getElementById('chat-window');
+
+    // // Handle form submission
+    // chatForm.addEventListener('submit', (event) => {
+    //   event.preventDefault(); // Prevent form from submitting
+
+    //   // Get user message
+    //   // const userMessage = document.getElementById('user-message').value;
+      
+    //   // Send user message to chatbot and receive response
+    //   const chatbotResponse = sendMessageToChatbot(userMessage);
+
+    //   // Display conversation in chat window
+    //   displayConversation(userMessage, chatbotResponse);
+    // });
+
+    // // Send message to chatbot and receive response
+    // function sendMessageToChatbot(message) {
+    //   // Send message to chatbot and receive response
+    //   // ...
+
+    //   // Return chatbot response
+    //   return chatbotResponse;
+    // }
+
+    // // Display conversation in chat window
+    // function displayConversation(userMessage, chatbotResponse) {
+    //   // Append user message and chatbot response to chat window
+    //   // ...
+    // }
+
+  
+  </script>
   
 
 </body>
