@@ -7,6 +7,7 @@ import torchaudio
 
 class TextToSpeech:
     def __init__(self):
+        self.CHUNK_SIZE = 15
         dir = os.path.dirname(__file__)
         self.local_file = 'tts_model.pt'
         self.local_file = os.path.join(dir, self.local_file)
@@ -110,9 +111,20 @@ class TextToSpeech:
                 text: str):
         if not text.isascii():
             text = self.urdu2roman(text)
-        audio = self.model.apply_tts(text,
-                                     speaker='hindi_female',
-                                     sample_rate=48000)
+        text_words = text.split()
+        audio = None
+        for i in range(0, len(text_words), self.CHUNK_SIZE):
+            curr_words = text_words[i:i + self.CHUNK_SIZE]
+            curr_text = ' '.join(curr_words)
+            if audio == None:
+                audio = self.model.apply_tts(curr_text,
+                                             speaker='hindi_female',
+                                             sample_rate=48000)
+            else:
+                new_audio = self.model.apply_tts(curr_text,
+                                                 speaker='hindi_female',
+                                                 sample_rate=48000)
+                audio = torch.cat((audio, new_audio), 0)
         return audio
     
     def predict_and_save(self,
@@ -121,9 +133,20 @@ class TextToSpeech:
                          file_name: str = "tts_audio") -> None:
         if not text.isascii():
             text = self.urdu2roman(text)
-        audio = self.model.apply_tts(text,
-                                     speaker='hindi_female',
-                                     sample_rate=48000)
+        text_words = text.split()
+        audio = None
+        for i in range(0, len(text_words), self.CHUNK_SIZE):
+            curr_words = text_words[i:i + self.CHUNK_SIZE]
+            curr_text = ' '.join(curr_words)
+            if audio == None:
+                audio = self.model.apply_tts(curr_text,
+                                             speaker='hindi_female',
+                                             sample_rate=48000)
+            else:
+                new_audio = self.model.apply_tts(curr_text,
+                                                 speaker='hindi_female',
+                                                 sample_rate=48000)
+                audio = torch.cat((audio, new_audio), 0)
         file_name = file_name.replace(" ", "_")
         file_name = file_name + '.wav'
         path = os.path.join(save_path, file_name)

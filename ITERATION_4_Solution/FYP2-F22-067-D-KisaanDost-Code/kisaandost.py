@@ -8,6 +8,8 @@ class KisaanDost:
         self.headers = {'Content-Type': 'application/json'}
         self.dialog = []
         self.DEFAULT_RESPONSE = u'میں ابھی کام نہیں کر رہا ہوں بارہ کرم کچھ دیر بعد کوشیش کریں'
+        self.greeting_replies = [ u'وا الاکومسلام', u'وا الائیکم سلام', u'وا الاکوم السلام', u'وا الاکوم سلام' ]
+        self.greeting_finishers = [u'،', u'۔', '']
 
     def get_user_input(self, user_input=None):
         if not user_input:
@@ -22,6 +24,8 @@ class KisaanDost:
                                  json={'dialog': dialog},
                                  headers=self.headers,
                                  timeout=300)
+        if (not response.status_code == 200):
+            raise Exception("No response from remote server.")
         text = response.json()['kisaanDostReply']
         return text
         
@@ -30,10 +34,14 @@ class KisaanDost:
             if len(dialog) == 0 or dialog[-1]['Agent'] != 'Farmer':
                 raise Exception("No user input received.") 
             text = self.get_remote_server_response(dialog[-5:])
-            if u'اسلام علیکم' not in dialog[-1]['Message'] and u'وا الاکوم سلام' in text:
-                text = text.replace(u'وا الاکوم سلام۔', '')
-                text = text.replace(u'وا الاکوم سلام', '')
-                text = text.strip()
+            for greeting_reply in self.greeting_replies:
+                if u'اسلام علیکم' not in dialog[-1]['Message'] and greeting_reply in text:
+                    for finisher in self.greeting_finishers:
+                        text = text.replace(greeting_reply + finisher, '')
+                    text = text.strip()
+            text = ''.join([char for char in text if not ('a' <= char <= 'z') \
+                                                     and not (0x0900 <= ord(char) <= 0x097F) \
+                                                     and not (0x0A00 <= ord(char) <= 0x0A4C)])
             return text
         except Exception as e:
             return self.DEFAULT_RESPONSE

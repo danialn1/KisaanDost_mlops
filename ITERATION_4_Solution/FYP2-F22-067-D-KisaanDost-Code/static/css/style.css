@@ -157,7 +157,15 @@ nav #icon {
 
 #alrt {
   position: relative;
-  MARGIN-top: 6%;
+  MARGIN-top: 8%;
+}
+@media (max-width: 1024px){
+.alert{
+  padding: 2.25rem 1.25rem !important;
+}
+#alrt {
+  MARGIN-top: 19%;
+}
 }
 
 .log_btns {
@@ -837,6 +845,32 @@ input:checked+.slider:before {
     top: -25px;
   }
 }
+
+@media (max-width: 1366px) {
+  .microphone {
+    margin-left: 426px;
+  }
+
+  #send {
+    margin-left: 57% !important;
+    margin-top: 3% !important;
+  }  
+  #recordButton{
+    margin-left: 8%;
+    border: none;
+    background: none;
+    }
+  #recordButton img{
+    width: 36px !important;
+    background: #1f3f25 /*!important;*/
+    border-radius: 40% !important;
+    border: none !important;
+    /* margin-left: 887%;
+    margin-bottom: -37%; */
+    position: relative;
+}
+}
+
 @media (max-width: 1440px) {
   #textInput {
     width: 34%;
@@ -851,20 +885,36 @@ input:checked+.slider:before {
     margin-top: 3%;
   }
 }
-
+/* #recordIcon{
+  width: 36px !important;
+  background: #1f3f25 !important;
+  border-radius: 40% !important;
+  border: none !important;
+} */
 @media (max-width: 1024px) {
   .microphone {
     margin-left: 267px;
   }
 
   #send {
-    margin-left: 617px;
-    top: -136px;
+    margin-left: 210px !important;
+    top: -11px;
   }
 
-  /* #recordButton{
+ #recordButton{
+  margin-bottom: 17%;
+  position: relative;
+  margin-left: 8%;
+  border: none;
+  background: none;
+  }
 
-  } */
+  #recordButton img{
+      width: 36px !important;
+      background: #1f3f25 /*!important;*/
+      border-radius: 40% !important;
+      border: none !important;
+  }
 }
 
 .first-chat .arrow {
@@ -942,7 +992,7 @@ input:checked+.slider:before {
 
   #textInput {
     width: 74% !important;
-    margin: 80px auto !important;
+    margin: 57px auto !important;
     height: 70px;
     padding: 31px;
   }
@@ -958,6 +1008,13 @@ input:checked+.slider:before {
   #send {
     margin-top: 12%;
     margin-left: 56%;
+  }
+  @media (max-width: 390px){
+  #send{
+    margin-left: 54% !important;
+    margin-top: 7% !important;
+    top: -17% !important;
+  }
   }
 
   body.chatbot {
@@ -1037,9 +1094,9 @@ input:checked+.slider:before {
 
 @media (max-width: 1040px) {
   #textInput {
-    width: 48%;
-    padding-left: 38px;
-    padding-right: 75px;
+    width: 80% !important;
+    padding-left: 37px;
+    padding-right: 74px;
     margin: 110px auto;
     border-radius: 10px;
   }
