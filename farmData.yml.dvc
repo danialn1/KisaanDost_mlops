@@ -1,0 +1,4 @@
+outs:
+- md5: cdf99ec56b61dfb947d2f8bed2dad90c
+  size: 371456
+  path: farmData.yml
